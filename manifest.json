@@ -1,0 +1,29 @@
+{
+  "dxt_version": "1.0",
+  "name": "my-mcp-server",
+  "version": "1.0.0",
+  "description": "A simple MCP server with calculator and greeting tools",
+  "author": {
+    "name": "Your Name",
+    "email": "your.email@example.com"
+  },
+  "license": "MIT",
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["dist/index.js"]
+    }
+  },
+  "tools": [
+    {
+      "name": "calculator",
+      "description": "Perform basic arithmetic operations"
+    },
+    {
+      "name": "greeting",
+      "description": "Generate personalized greetings"
+    }
+  ]
+}
