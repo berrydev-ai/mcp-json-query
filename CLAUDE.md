@@ -176,18 +176,18 @@ For user-configurable tools:
 ## Build and Development Workflow
 
 ### Available NPM Scripts
-- `npm run build` - Compile TypeScript to JavaScript
-- `npm run dev` - Build and run for development
-- `npm run clean` - Remove dist directory
-- `npm run dxt:validate` - Validate manifest.json
-- `npm run dxt:pack` - Build and create .dxt file
+- `yarn build` - Compile TypeScript to JavaScript
+- `yarn dev` - Build and run for development
+- `yarn clean` - Remove dist directory
+- `yarn dxt:validate` - Validate manifest.json
+- `yarn dxt:pack` - Build and create .dxt file
 
 ### Development Process
 1. Make changes to TypeScript files in `src/`
-2. Run `npm run build` to compile
-3. Test with `npm run dev`
-4. Validate with `npm run dxt:validate`
-5. Package with `npm run dxt:pack` for distribution
+2. Run `yarn build` to compile
+3. Test with `yarn dev`
+4. Validate with `yarn dxt:validate`
+5. Package with `yarn dxt:pack` for distribution
 
 ## DXT-Specific Considerations
 
@@ -225,7 +225,7 @@ For user-configurable tools:
 - Handle all error cases explicitly
 
 ### Testing Approach
-- Test tools manually with `npm run dev`
+- Test tools manually with `yarn dev`
 - Validate JSON schemas before deployment
 - Test DXT installation in Claude Desktop
 - Verify error handling with invalid inputs
@@ -238,24 +238,24 @@ For user-configurable tools:
 
 **1. ALWAYS run compilation check:**
 ```bash
-npm run build
+yarn build
 ```
 
 **2. If ANY errors appear:**
 - Stop immediately
 - Read each error message carefully
 - Fix errors in the order they appear
-- Re-run `npm run build` after each fix
+- Re-run `yarn build` after each fix
 - Continue until ZERO errors
 
 **3. If ANY warnings appear:**
 - Treat warnings as errors
 - Fix all warnings before proceeding
-- Re-run `npm run build` until clean
+- Re-run `yarn build` until clean
 
 **4. Only after clean build:**
-- Test with `npm run dev`
-- Validate with `npm run dxt:validate`
+- Test with `yarn dev`
+- Validate with `yarn dxt:validate`
 - Declare task complete
 
 ### Example Error-Fix Cycle
@@ -264,21 +264,21 @@ npm run build
 # Write code...
 
 # MANDATORY: Check for errors
-npm run build
+yarn build
 # ❌ Error: Cannot find module './tools/weather.js'
 
 # Fix the import path
 # Re-check
-npm run build
+yarn build
 # ❌ Error: 'z' is not defined
 
 # Add missing Zod import
 # Re-check
-npm run build
+yarn build
 # ✅ Success: No errors, no warnings
 
 # Now test
-npm run dev
+yarn dev
 # ✅ Server starts successfully
 
 # Task is complete
@@ -317,22 +317,22 @@ Could you help me understand how to fix this?
 ## Success Criteria Summary
 
 A well-implemented tool should:
-- ✅ Compile without TypeScript errors (`npm run build` succeeds)
+- ✅ Compile without TypeScript errors (`yarn build` succeeds)
 - ✅ Compile without TypeScript warnings (zero warnings)
 - ✅ Follow the established patterns exactly
 - ✅ Include proper error handling and Zod validation
 - ✅ Have clear, user-friendly descriptions
-- ✅ Start successfully (`npm run dev` works)
-- ✅ Pass manifest validation (`npm run dxt:validate` passes)
+- ✅ Start successfully (`yarn dev` works)
+- ✅ Pass manifest validation (`yarn dxt:validate` passes)
 - ✅ Work when packaged as a DXT extension
 - ✅ Be easily understood by TypeScript beginners
 
 ## Final Reminder for Claude Code
 
 **The golden rule:** Never consider a coding task complete until:
-1. `npm run build` completes with ZERO errors and ZERO warnings
-2. `npm run dev` starts the server successfully
-3. `npm run dxt:validate` passes without issues
+1. `yarn build` completes with ZERO errors and ZERO warnings
+2. `yarn dev` starts the server successfully
+3. `yarn dxt:validate` passes without issues
 
 **If any step fails, the code is not ready and must be fixed first.**
 
@@ -342,10 +342,10 @@ Remember: This project prioritizes simplicity, maintainability, and correctness.
 **Always run these commands after writing code:**
 ```bash
 # Clean previous build
-npm run clean
+yarn clean
 
 # Attempt to compile and catch all errors
-npm run build
+yarn build
 ```
 
 ### 2. TypeScript Error Resolution Protocol
@@ -417,19 +417,19 @@ When TypeScript compilation fails, follow this order:
 2. **Check imports first** - most errors are import/export issues
 3. **Verify Zod schemas** - ensure all parameters are properly defined
 4. **Check function signatures** - ensure they match the established patterns
-5. **Test the fix** - run `npm run build` again
+5. **Test the fix** - run `yarn build` again
 6. **Repeat until clean** - continue until zero TypeScript errors
 
 ### 5. Pre-Completion Checklist
 
 Before considering any code task complete, verify:
 
-- [ ] `npm run build` completes with zero errors
-- [ ] `npm run build` completes with zero warnings
+- [ ] `yarn build` completes with zero errors
+- [ ] `yarn build` completes with zero warnings
 - [ ] All imports use `.js` extensions for local files
 - [ ] All Zod schemas include `.describe()` for parameters
 - [ ] Tool functions follow the exact established pattern
-- [ ] `manifest.json` is valid JSON (run `npm run dxt:validate`)
+- [ ] `manifest.json` is valid JSON (run `yarn dxt:validate`)
 
 ### 6. Warning Resolution
 
@@ -445,16 +445,16 @@ After fixing all errors and warnings:
 
 ```bash
 # Verify clean build
-npm run build
+yarn build
 
 # Test the server runs without crashing
-npm run dev
+yarn dev
 
 # Validate manifest structure
-npm run dxt:validate
+yarn dxt:validate
 
 # If all pass, the code is ready
-npm run dxt:pack
+yarn dxt:pack
 ```
 
 ## When Asked for Help
@@ -468,9 +468,9 @@ npm run dxt:pack
 6. **ALWAYS run the error checking process above**
 
 ### For Debugging
-1. Check TypeScript compilation errors first (`npm run build`)
-2. Validate manifest.json structure (`npm run dxt:validate`)
-3. Test tool registration and execution (`npm run dev`)
+1. Check TypeScript compilation errors first (`yarn build`)
+2. Validate manifest.json structure (`yarn dxt:validate`)
+3. Test tool registration and execution (`yarn dev`)
 4. Verify import/export paths use .js extensions
 5. **Fix all errors and warnings before declaring success**
 
@@ -494,10 +494,10 @@ npm run dxt:pack
 - Include proper error handling
 
 ### After Writing Code (MANDATORY)
-1. **Run `npm run build`** - fix any compilation errors
+1. **Run `yarn build`** - fix any compilation errors
 2. **Fix all warnings** - treat warnings as errors
-3. **Test with `npm run dev`** - ensure server starts
-4. **Validate manifest** - run `npm run dxt:validate`
+3. **Test with `yarn dev`** - ensure server starts
+4. **Validate manifest** - run `yarn dxt:validate`
 5. **Only then declare the task complete**
 
 ## Error Message Interpretation Guide
