@@ -2,6 +2,24 @@
 
 Model Context Protocol (MCP) server for the Orca platform.
 
+
+## MCP Installation
+
+Add the following to your Claude Desktop MCP server configuration:
+
+```
+{
+  "mcpServers": {
+    "orca-mcp": {
+      "command": "node",
+      "args": [
+        "@giraffemedia/orca-mcp@latest"
+      ]
+    }
+  }
+}
+```
+
 ## Project Structure
 
 ```
