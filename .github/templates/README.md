@@ -157,7 +157,7 @@ For more complex release note generation, you can:
 Download: See assets below.
 ```
 
-### Detailed Template  
+### Detailed Template
 ```markdown
 # 🦒 {{PACKAGE_NAME}} {{VERSION}}
 
@@ -169,7 +169,7 @@ Download: See assets below.
 ## Installation
 [Detailed installation steps...]
 
-## Documentation  
+## Documentation
 [Links to docs, examples, etc...]
 
 ## Support

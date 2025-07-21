@@ -28,7 +28,10 @@
     "release:patch": "npm run version:patch && npm run dxt:pack",
     "release:minor": "npm run version:minor && npm run dxt:pack",
     "release:major": "npm run version:major && npm run dxt:pack",
-    "release": "./scripts/release.sh"
+    "release": "./scripts/release.sh",
+    "changelog:add": "./scripts/changelog.sh add",
+    "changelog:prepare": "./scripts/changelog.sh prepare",
+    "changelog:help": "./scripts/changelog.sh help"
   },
   "bin": {
     "giraffe-orca-mcp": "./dist/index.js"

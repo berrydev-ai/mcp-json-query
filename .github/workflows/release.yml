@@ -74,27 +74,62 @@ jobs:
     - name: Generate changelog
       id: changelog
       run: |
-        # Get the previous tag for changelog generation
-        PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+        echo "🔍 Looking for manual changelog..."
         
-        if [ -z "$PREVIOUS_TAG" ]; then
-          echo "## 🎉 Initial Release" > changelog.md
-          echo "" >> changelog.md
-          echo "This is the first release of Giraffe Orca MCP Server!" >> changelog.md
-        else
-          echo "## 📝 Changes since $PREVIOUS_TAG" > changelog.md
-          echo "" >> changelog.md
+        # Check if CHANGELOG.md exists and has Unreleased section
+        if [ -f "CHANGELOG.md" ] && grep -q "## \[Unreleased\]" CHANGELOG.md; then
+          echo "📝 Found manual CHANGELOG.md - extracting Unreleased section"
           
-          # Generate changelog from commits
-          git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s" --no-merges | head -20 >> changelog.md
+          # Extract the Unreleased section
+          sed -n '/## \[Unreleased\]/,/^## \[/p' CHANGELOG.md | \
+            sed '$d' | \
+            tail -n +2 | \
+            sed '/^$/d' > changelog.md
           
-          # If no commits, add a generic message
-          if [ ! -s changelog.md ] || [ $(wc -l < changelog.md) -le 2 ]; then
+          # Check if we got any content
+          if [ -s changelog.md ]; then
+            echo "✅ Using manual changelog entries"
+            # Add a header
+            sed -i '1i## 📝 What\'s New' changelog.md 2>/dev/null || {
+              echo "## 📝 What's New" > changelog.tmp
+              cat changelog.md >> changelog.tmp
+              mv changelog.tmp changelog.md
+            }
+          else
+            echo "⚠️ Manual changelog found but Unreleased section is empty"
             echo "## 📝 Updates" > changelog.md
             echo "" >> changelog.md
-            echo "- Various improvements and bug fixes" >> changelog.md
+            echo "- Manual release - see CHANGELOG.md for details" >> changelog.md
+          fi
+        else
+          echo "🤖 No manual changelog found - generating from git commits"
+          
+          # Get the previous tag for changelog generation
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "## 🎉 Initial Release" > changelog.md
+            echo "" >> changelog.md
+            echo "This is the first release of Giraffe Orca MCP Server!" >> changelog.md
+          else
+            echo "## 📝 Changes since $PREVIOUS_TAG" > changelog.md
+            echo "" >> changelog.md
+            
+            # Generate changelog from commits
+            git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s" --no-merges | head -20 >> changelog.md
+            
+            # If no commits, add a generic message
+            if [ ! -s changelog.md ] || [ $(wc -l < changelog.md) -le 2 ]; then
+              echo "## 📝 Updates" > changelog.md
+              echo "" >> changelog.md
+              echo "- Various improvements and bug fixes" >> changelog.md
+            fi
           fi
         fi
+        
+        echo "Generated changelog content:"
+        echo "============================"
+        cat changelog.md
         
         # Store changelog content for later use
         echo "changelog_content<<EOF" >> $GITHUB_OUTPUT

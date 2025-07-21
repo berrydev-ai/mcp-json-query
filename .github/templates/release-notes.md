@@ -15,7 +15,7 @@
 ## 🎯 Features
 
 - **JSONPath Queries**: Perform powerful JSONPath queries on large JSON files
-- **Schema Generation**: Automatically generate JSON schemas from JSON files  
+- **Schema Generation**: Automatically generate JSON schemas from JSON files
 - **Claude Desktop Integration**: Native MCP server integration with Claude Desktop
 - **High Performance**: Optimized for handling large JSON datasets
 - **Type Safety**: Built with TypeScript for reliability and better development experience
@@ -27,7 +27,7 @@
 1. **Download** the `.dxt` file from the assets below
 2. **Install** by double-clicking the `.dxt` file or through Claude Desktop:
    - Open Claude Desktop
-   - Go to Settings → Extensions  
+   - Go to Settings → Extensions
    - Click "Install Extension"
    - Select the downloaded `.dxt` file
 
@@ -37,7 +37,7 @@
 # From downloaded package
 npm install ./{{PACKAGE_NAME}}-{{PACKAGE_VERSION}}.tgz
 
-# From GitHub Registry  
+# From GitHub Registry
 npm install @berrydev-ai/{{PACKAGE_NAME}}
 ```
 
@@ -62,7 +62,7 @@ Once installed in Claude Desktop, you can use these powerful JSON operations:
 Query my JSON file at /path/to/data.json for all users with $.users[*].name
 ```
 
-### Schema Generation  
+### Schema Generation
 ```
 Generate a JSON schema for the file at /path/to/sample.json
 ```

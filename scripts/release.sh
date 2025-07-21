@@ -33,6 +33,21 @@ if ! git diff-index --quiet HEAD --; then
     exit 1
 fi
 
+# Check if we have a CHANGELOG.md and remind user to update it
+if [ -f "CHANGELOG.md" ]; then
+    echo "📝 Reminder: Update CHANGELOG.md before releasing!"
+    echo "   Add your changes to the [Unreleased] section"
+    echo "   Use: ./scripts/changelog.sh add <type> '<message>'"
+    echo "   Example: ./scripts/changelog.sh add fixed 'Handle large JSON files better'"
+    echo ""
+    read -p "Have you updated the changelog? (y/N): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "❌ Aborting release. Please update CHANGELOG.md first."
+        exit 1
+    fi
+fi
+
 # Pull latest changes
 echo "📥 Pulling latest changes..."
 git pull origin main

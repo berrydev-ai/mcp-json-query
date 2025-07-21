@@ -7,9 +7,9 @@ Model Context Protocol (MCP) server for the Orca platform.
 ```
 orca-mcp/
 ├─ src/
-│   ├─ index.ts               # Main server file
+│   ├─ index.ts                # Main server file
 │   └─ tools/
-│       └─ json-query.ts      # JSON query tool
+│       └─ json-query.ts       # JSON query tool
 ├─ dist/                       # Compiled JavaScript (generated)
 ├─ extensions/                 # Packaged DXT extensions
 ├─ package.json                # Dependencies and scripts
@@ -105,6 +105,25 @@ registerMyTool(this.server);
     }
   ]
 }
+```
+
+5. **Update the changelog:**
+```bash
+# Add changelog entry for your new tool
+yarn changelog:add added "New tool for handling X functionality"
+```
+
+### Changelog Management
+
+This project uses a comprehensive changelog system. See [docs/CHANGELOG_GUIDE.md](./docs/CHANGELOG_GUIDE.md) for details.
+
+```bash
+# Add changelog entries as you develop
+yarn changelog:add added "New JSON validation feature"
+yarn changelog:add fixed "Bug in nested object parsing"
+
+# Create releases with automatic changelog integration
+yarn run release  # Will prompt for changelog updates
 ```
 
 ### Building and Testing
