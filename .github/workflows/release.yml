@@ -90,7 +90,7 @@ jobs:
             if [ -s changelog.md ]; then
               echo "✅ Using manual changelog entries"
               # Add a header
-              sed -i '1i## 📝 What\'s New' changelog.md 2>/dev/null || {
+              sed -i '1i## 📝 What'"'"'s New' changelog.md 2>/dev/null || {
                 echo "## 📝 What's New" > changelog.tmp
                 cat changelog.md >> changelog.tmp
                 mv changelog.tmp changelog.md
