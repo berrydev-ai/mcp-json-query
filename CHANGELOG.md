@@ -16,4 +16,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - NPM package distribution support
 - GitHub Actions CI/CD pipeline
 
-[1.0.0]: https://github.com/berrydev-ai/giraffe-orca-mcp/releases/tag/v1.0.0
+[1.0.0]: https://github.com/giraffemedia/orca-mcp/releases/tag/v1.0.0

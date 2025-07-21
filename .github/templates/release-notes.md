@@ -38,13 +38,13 @@
 npm install ./{{PACKAGE_NAME}}-{{PACKAGE_VERSION}}.tgz
 
 # From GitHub Registry
-npm install @berrydev-ai/{{PACKAGE_NAME}}
+npm install @giraffemedia/{{PACKAGE_NAME}}
 ```
 
 ### Option 3: Direct from Source
 
 ```bash
-git clone https://github.com/berrydev-ai/giraffe-orca-mcp.git
+git clone https://github.com/giraffemedia/orca-mcp.git
 cd giraffe-orca-mcp
 yarn install
 yarn build
@@ -96,8 +96,8 @@ Find all products with price greater than $100 in my inventory file using $.prod
 
 ## 🔗 Resources
 
-- **Documentation**: [README.md](https://github.com/berrydev-ai/giraffe-orca-mcp#readme)
-- **Issues**: [Report bugs or request features](https://github.com/berrydev-ai/giraffe-orca-mcp/issues)
+- **Documentation**: [README.md](https://github.com/giraffemedia/orca-mcp#readme)
+- **Issues**: [Report bugs or request features](https://github.com/giraffemedia/orca-mcp/issues)
 - **JSONPath Syntax**: [JSONPath Documentation](https://github.com/JSONPath-Plus/JSONPath#syntax-through-examples)
 
 ---
@@ -106,7 +106,7 @@ Find all products with price greater than $100 in my inventory file using $.prod
 
 - **Version**: {{PACKAGE_VERSION}}
 - **Build Date**: {{BUILD_DATE}}
-- **Commit**: [`{{COMMIT_SHA_SHORT}}`](https://github.com/berrydev-ai/giraffe-orca-mcp/commit/{{COMMIT_SHA}})
+- **Commit**: [`{{COMMIT_SHA_SHORT}}`](https://github.com/giraffemedia/orca-mcp/commit/{{COMMIT_SHA}})
 - **Node.js Compatibility**: >= 20.0.0
 
 ---

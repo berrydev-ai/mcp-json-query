@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to publish (leave empty for current package.json version)'
+        description: "Version to publish (leave empty for current package.json version)"
         required: false
         type: string
 
@@ -19,38 +19,38 @@ jobs:
       packages: write
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
-        cache: 'yarn'
-        registry-url: 'https://npm.pkg.github.com'
-        scope: '@berrydev-ai'
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "yarn"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@berrydev-ai"
 
-    - name: Install dependencies
-      run: yarn install --frozen-lockfile
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
-    - name: Run quality checks
-      run: yarn run quality
+      - name: Run quality checks
+        run: yarn run quality
 
-    - name: Build project
-      run: yarn run build
+      - name: Build project
+        run: yarn run build
 
-    - name: Update version if specified
-      if: github.event.inputs.version != ''
-      run: |
-        npm version ${{ github.event.inputs.version }} --no-git-tag-version
-        echo "Updated version to ${{ github.event.inputs.version }}"
+      - name: Update version if specified
+        if: github.event.inputs.version != ''
+        run: |
+          npm version ${{ github.event.inputs.version }} --no-git-tag-version
+          echo "Updated version to ${{ github.event.inputs.version }}"
 
-    - name: Configure npm authentication
-      run: |
-        echo "@berrydev-ai:registry=https://npm.pkg.github.com" >> .npmrc
-        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
+      - name: Configure npm authentication
+        run: |
+          echo "@berrydev-ai:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
-    - name: Publish to GitHub Registry
-      run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish to GitHub Registry
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

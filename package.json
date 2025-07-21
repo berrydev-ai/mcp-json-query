@@ -1,7 +1,7 @@
 {
-  "name": "@berrydev-ai/giraffe-orca-mcp",
+  "name": "@giraffemedia/orca-mcp",
   "version": "1.0.0",
-  "description": "Giraffe Orca MCP Server",
+  "description": "Giraffe Meida Orca MCP Server",
   "license": "UNLICENSED",
   "private": true,
   "main": "dist/index.js",
@@ -34,11 +34,11 @@
     "changelog:help": "./scripts/changelog.sh help"
   },
   "bin": {
-    "giraffe-orca-mcp": "./dist/index.js"
+    "orca-mcp": "./dist/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/berrydev-ai/giraffe-orca-mcp.git"
+    "url": "https://github.com/giraffemedia/orca-mcp.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -47,7 +47,6 @@
     "@modelcontextprotocol/sdk": "^1.16.0",
     "json-schema-generator": "^2.0.6",
     "jsonpath-plus": "^10.3.0",
-    "shx": "^0.4.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -63,7 +62,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.5.3",
     "prettier": "^3.2.5",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "shx": "^0.4.0"
   },
   "files": [
     "dist/**/*",

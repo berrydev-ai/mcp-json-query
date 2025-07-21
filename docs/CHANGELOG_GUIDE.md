@@ -6,21 +6,21 @@ This guide covers how to maintain changelogs for your Giraffe Orca MCP Server pr
 
 ### 1. Manual Changelog (Recommended)
 
-**Pros:** Curated, user-friendly, consistent format  
+**Pros:** Curated, user-friendly, consistent format
 **Cons:** Requires manual maintenance
 
 Use the `CHANGELOG.md` file following [Keep a Changelog](https://keepachangelog.com/) format.
 
 ### 2. Automatic Changelog
 
-**Pros:** Zero maintenance, always up-date  
+**Pros:** Zero maintenance, always up-date
 **Cons:** May include irrelevant commit messages
 
 Generated from git commit messages between releases.
 
 ### 3. Hybrid Approach (Best of Both)
 
-**Pros:** Manual curation with automatic fallback  
+**Pros:** Manual curation with automatic fallback
 **Cons:** Requires some manual work
 
 Our system automatically detects and prefers manual changelogs, falls back to git commits.
@@ -123,7 +123,7 @@ The release system automatically:
 
 # The script will:
 # - Remind you to update changelog ✓
-# - Extract [Unreleased] section ✓  
+# - Extract [Unreleased] section ✓
 # - Create professional release notes ✓
 # - Generate downloadable packages ✓
 ```
@@ -141,7 +141,7 @@ All notable changes to this project will be documented in this file.
 - New JSON validation for large files
 - Support for custom JSONPath functions
 
-### Fixed  
+### Fixed
 - Memory leak in query processing
 - Edge case in nested array parsing
 
@@ -161,9 +161,9 @@ All notable changes to this project will be documented in this file.
 - JSONPath querying functionality
 - Claude Desktop integration
 
-[Unreleased]: https://github.com/berrydev-ai/giraffe-orca-mcp/compare/v1.1.0...HEAD
-[1.1.0]: https://github.com/berrydev-ai/giraffe-orca-mcp/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/berrydev-ai/giraffe-orca-mcp/releases/tag/v1.0.0
+[Unreleased]: https://github.com/giraffemedia/orca-mcp/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/giraffemedia/orca-mcp/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/giraffemedia/orca-mcp/releases/tag/v1.0.0
 ```
 
 ## 🎯 Best Practices
