@@ -58,16 +58,19 @@ yarn dxt:pack
 Once installed in Claude Desktop, you can use these powerful JSON operations:
 
 ### JSONPath Queries
+
 ```
 Query my JSON file at /path/to/data.json for all users with $.users[*].name
 ```
 
 ### Schema Generation
+
 ```
 Generate a JSON schema for the file at /path/to/sample.json
 ```
 
 ### Real-world Example
+
 ```
 Find all products with price greater than $100 in my inventory file using $.products[?(@.price > 100)]
 ```
@@ -86,11 +89,11 @@ Find all products with price greater than $100 in my inventory file using $.prod
 
 ## 📋 Available Downloads
 
-| Package Type | Description | Use Case |
-|-------------|-------------|----------|
-| **{{PACKAGE_NAME}}-{{PACKAGE_VERSION}}.dxt** | Claude Desktop Extension | Direct installation in Claude Desktop |
-| **{{PACKAGE_NAME}}-{{PACKAGE_VERSION}}.tgz** | NPM Package | Manual npm installation or development |
-| **Source Code** | Full source archives | Development and customization |
+| Package Type                                 | Description              | Use Case                               |
+| -------------------------------------------- | ------------------------ | -------------------------------------- |
+| **{{PACKAGE_NAME}}-{{PACKAGE_VERSION}}.dxt** | Claude Desktop Extension | Direct installation in Claude Desktop  |
+| **{{PACKAGE_NAME}}-{{PACKAGE_VERSION}}.tgz** | NPM Package              | Manual npm installation or development |
+| **Source Code**                              | Full source archives     | Development and customization          |
 
 ---
 

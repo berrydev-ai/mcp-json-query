@@ -5,6 +5,7 @@ You are tasked with performing a complete patch release for the Giraffe Orca MCP
 ## Prerequisites Check
 
 First, verify the following:
+
 - Working directory is the orca-mcp project root
 - You're on the main branch with no uncommitted changes
 - All recent changes need to be documented in the changelog
@@ -14,17 +15,20 @@ First, verify the following:
 ### 1. Update CHANGELOG.md
 
 **Add an Unreleased section if it doesn't exist:**
+
 - Check if CHANGELOG.md has an `[Unreleased]` section
 - If not, create one at the top with proper formatting
 - Follow the Keep a Changelog format with sections: Added, Changed, Deprecated, Removed, Fixed, Security
 
 **Document recent changes:**
+
 - Review recent commits since the last release using `git log`
 - Add entries to the appropriate sections under `[Unreleased]`
 - Use the changelog script: `./scripts/changelog.sh add <type> "<message>"`
 - Focus on user-facing changes, bug fixes, and new features
 
 **Example changelog entries:**
+
 ```bash
 ./scripts/changelog.sh add fixed "Fixed bash quoting issue in GitHub Actions release workflow"
 ./scripts/changelog.sh add changed "Improved error handling in release scripts"
@@ -33,6 +37,7 @@ First, verify the following:
 ### 2. Run Pre-Release Validation
 
 Execute the following commands and ensure they all pass:
+
 ```bash
 # Clean build and quality checks
 npm run clean
@@ -51,11 +56,13 @@ Fix any errors before proceeding.
 ### 3. Create the Patch Release
 
 Run the release script:
+
 ```bash
 ./scripts/release.sh patch
 ```
 
 This script will:
+
 - Validate the environment and check for uncommitted changes
 - Prompt you to confirm changelog updates
 - Run quality checks and build the project
@@ -68,6 +75,7 @@ This script will:
 ### 4. Monitor Release Process
 
 After the script completes:
+
 - Check GitHub Actions at: https://github.com/giraffemedia/orca-mcp/actions
 - Verify the release workflow runs successfully
 - Confirm the GitHub release is created with proper assets:
@@ -78,6 +86,7 @@ After the script completes:
 ### 5. Post-Release Verification
 
 Once the GitHub release is complete:
+
 - Download and test the `.dxt` file in Claude Desktop
 - Verify the release notes are accurate and well-formatted
 - Check that version numbers are consistent across all files
@@ -86,6 +95,7 @@ Once the GitHub release is complete:
 ## Error Handling
 
 If any step fails:
+
 - **Build/Quality Issues**: Fix TypeScript errors and linting issues first
 - **Changelog Issues**: Ensure proper formatting and complete the `[Unreleased]` section
 - **Git Issues**: Resolve merge conflicts and ensure clean working directory
@@ -94,6 +104,7 @@ If any step fails:
 ## Quality Standards
 
 Ensure the release meets these criteria:
+
 - ✅ All TypeScript compiles without errors or warnings
 - ✅ All quality checks (linting, formatting, type-checking) pass
 - ✅ DXT package validates and builds successfully

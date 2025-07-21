@@ -7,6 +7,7 @@ This document provides context and guidelines for Claude Code when working on th
 This is a clean, minimal TypeScript MCP server project that compiles to Node.js and packages into DXT files for one-click installation in Claude Desktop and other MCP-enabled applications.
 
 **Key Goals:**
+
 - Keep the project structure simple and beginner-friendly
 - Maintain clean separation of concerns with tools in separate files
 - Ensure type safety throughout
@@ -49,8 +50,8 @@ export function registerToolName(server: McpServer) {
       description: 'Clear, concise description of what this tool does',
       inputSchema: {
         param1: z.string().describe('Clear description of this parameter'),
-        param2: z.number().optional().describe('Optional parameter description')
-      }
+        param2: z.number().optional().describe('Optional parameter description'),
+      },
     },
     async ({ param1, param2 }) => {
       try {
@@ -61,9 +62,9 @@ export function registerToolName(server: McpServer) {
           content: [
             {
               type: 'text',
-              text: `Result: ${result}`
-            }
-          ]
+              text: `Result: ${result}`,
+            },
+          ],
         };
       } catch (error) {
         throw new Error(`Tool execution failed: ${error.message}`);
@@ -116,12 +117,14 @@ import { registerToolName } from './tools/tool-name.js';
 When asked to create a new tool, follow these steps:
 
 ### 1. Create the Tool File
+
 - Create `src/tools/[tool-name].ts`
 - Follow the exact pattern shown above
 - Include comprehensive input validation
 - Add meaningful error messages
 
 ### 2. Register in Main Server
+
 Add to `src/index.ts` in the `registerTools()` method:
 
 ```typescript
@@ -134,6 +137,7 @@ private registerTools() {
 ```
 
 ### 3. Update Manifest
+
 Add tool definition to `manifest.json`:
 
 ```json
@@ -150,25 +154,33 @@ Add tool definition to `manifest.json`:
 ## Common Development Tasks
 
 ### Adding External Dependencies
+
 When adding new npm packages:
+
 1. Add to `package.json` dependencies
 2. Import with proper TypeScript types if available
 3. Add `@types/package-name` to devDependencies if needed
 
 ### File System Operations
+
 If tools need file access:
+
 1. Use Node.js `fs/promises` for async operations
 2. Respect DXT sandbox limitations
 3. Add appropriate permissions to `manifest.json` if needed
 
 ### Network Operations
+
 For HTTP/API calls:
+
 1. Use native `fetch` (Node.js 18+) or add `axios`
 2. Implement proper error handling and timeouts
 3. Add network permissions to manifest if needed
 
 ### Configuration Parameters
+
 For user-configurable tools:
+
 1. Add parameters to `manifest.json` `userConfig`
 2. Mark sensitive data with `"sensitive": true`
 3. Access via server context in tool handlers
@@ -176,6 +188,7 @@ For user-configurable tools:
 ## Build and Development Workflow
 
 ### Available NPM Scripts
+
 - `yarn build` - Compile TypeScript to JavaScript
 - `yarn dev` - Build and run for development
 - `yarn clean` - Remove dist directory
@@ -183,6 +196,7 @@ For user-configurable tools:
 - `yarn dxt:pack` - Build and create .dxt file
 
 ### Development Process
+
 1. Make changes to TypeScript files in `src/`
 2. Run `yarn build` to compile
 3. Test with `yarn dev`
@@ -192,18 +206,21 @@ For user-configurable tools:
 ## DXT-Specific Considerations
 
 ### Manifest Requirements
+
 - Keep tool descriptions user-friendly (not technical)
 - Use semantic versioning for `version`
 - Declare all permissions your tools need
 - Mark sensitive configuration as `"sensitive": true`
 
 ### Runtime Environment
+
 - Assume Node.js environment with built-in modules available
 - No access to system-level operations beyond granted permissions
 - Communication happens via stdio (JSON-RPC)
 - Process lifecycle managed by host application
 
 ### Distribution
+
 - Final `.dxt` file contains compiled JavaScript, not TypeScript
 - All dependencies must be bundled or declared
 - File size matters - keep extensions lean
@@ -212,12 +229,14 @@ For user-configurable tools:
 ## Code Quality Standards
 
 ### TypeScript Configuration
+
 - Strict mode enabled - no loose type checking
 - ES2020 target for modern JavaScript features
 - CommonJS modules for Node.js compatibility
 - Source maps disabled for production builds
 
 ### Code Style
+
 - Use meaningful variable and function names
 - Include JSDoc comments for complex functions
 - Keep functions focused and single-purpose
@@ -225,6 +244,7 @@ For user-configurable tools:
 - Handle all error cases explicitly
 
 ### Testing Approach
+
 - Test tools manually with `yarn dev`
 - Validate JSON schemas before deployment
 - Test DXT installation in Claude Desktop
@@ -237,11 +257,13 @@ For user-configurable tools:
 ### Step-by-Step Error Resolution Protocol
 
 **1. ALWAYS run compilation check:**
+
 ```bash
 yarn build
 ```
 
 **2. If ANY errors appear:**
+
 - Stop immediately
 - Read each error message carefully
 - Fix errors in the order they appear
@@ -249,11 +271,13 @@ yarn build
 - Continue until ZERO errors
 
 **3. If ANY warnings appear:**
+
 - Treat warnings as errors
 - Fix all warnings before proceeding
 - Re-run `yarn build` until clean
 
 **4. Only after clean build:**
+
 - Test with `yarn dev`
 - Validate with `yarn dxt:validate`
 - Declare task complete
@@ -296,12 +320,14 @@ yarn dev
 4. **Ask for guidance** rather than guessing
 
 **Common "I'm Stuck" Scenarios:**
+
 - Complex type inference issues
 - Module resolution problems
 - Version compatibility conflicts
 - Zod schema validation errors
 
 **Template for asking for help:**
+
 ```
 I encountered a TypeScript error I cannot resolve:
 
@@ -317,6 +343,7 @@ Could you help me understand how to fix this?
 ## Success Criteria Summary
 
 A well-implemented tool should:
+
 - ✅ Compile without TypeScript errors (`yarn build` succeeds)
 - ✅ Compile without TypeScript warnings (zero warnings)
 - ✅ Follow the established patterns exactly
@@ -330,6 +357,7 @@ A well-implemented tool should:
 ## Final Reminder for Claude Code
 
 **The golden rule:** Never consider a coding task complete until:
+
 1. `yarn build` completes with ZERO errors and ZERO warnings
 2. `yarn dev` starts the server successfully
 3. `yarn dxt:validate` passes without issues
@@ -339,7 +367,9 @@ A well-implemented tool should:
 Remember: This project prioritizes simplicity, maintainability, and correctness. A working, error-free solution is always better than a complex one with TypeScript issues.
 
 ### 1. Mandatory TypeScript Compilation Check
+
 **Always run these commands after writing code:**
+
 ```bash
 # Clean previous build
 yarn clean
@@ -353,16 +383,19 @@ yarn build
 **If compilation fails, follow this exact process:**
 
 #### Step 1: Import/Export Issues
+
 - Verify all imports use `.js` extensions for local files
 - Check that all imports actually exist in the target files
 - Ensure proper export statements in imported modules
 
 #### Step 2: Type Safety Issues
+
 - Ensure all Zod schemas are properly defined
 - Check that function parameters match the schema definitions
 - Verify return types match expected MCP tool response format
 
 #### Step 3: Missing Dependencies
+
 - Verify all required packages are in `package.json`
 - Check for missing type definitions (`@types/*` packages)
 - Ensure version compatibility between packages
@@ -370,6 +403,7 @@ yarn build
 ### 3. Common TypeScript Fixes
 
 **Import Resolution Errors:**
+
 ```typescript
 // ❌ Wrong
 import { registerTool } from './tools/mytool';
@@ -379,13 +413,14 @@ import { registerTool } from './tools/mytool.js';
 ```
 
 **Missing Zod Imports:**
+
 ```typescript
 // ❌ Missing
 export function registerTool(server: McpServer) {
   server.registerTool('name', {
     inputSchema: {
-      param: z.string() // Error: z is not defined
-    }
+      param: z.string(), // Error: z is not defined
+    },
   });
 }
 
@@ -394,13 +429,14 @@ import { z } from 'zod';
 export function registerTool(server: McpServer) {
   server.registerTool('name', {
     inputSchema: {
-      param: z.string().describe('Parameter description')
-    }
+      param: z.string().describe('Parameter description'),
+    },
   });
 }
 ```
 
 **Type Annotation Issues:**
+
 ```typescript
 // ❌ Wrong - manual typing when Zod handles it
 async ({ param1, param2 }: { param1: string, param2?: number }) => {
@@ -434,6 +470,7 @@ Before considering any code task complete, verify:
 ### 6. Warning Resolution
 
 **Treat warnings as errors** - fix all warnings including:
+
 - Unused variables (remove or prefix with `_`)
 - Unreachable code (fix logic)
 - Implicit any types (add proper typing)
@@ -460,6 +497,7 @@ yarn dxt:pack
 ## When Asked for Help
 
 ### For New Tools
+
 1. Ask for the tool's purpose and expected inputs/outputs
 2. Follow the exact patterns established in existing tools
 3. Create comprehensive input validation with Zod schemas
@@ -468,6 +506,7 @@ yarn dxt:pack
 6. **ALWAYS run the error checking process above**
 
 ### For Debugging
+
 1. Check TypeScript compilation errors first (`yarn build`)
 2. Validate manifest.json structure (`yarn dxt:validate`)
 3. Test tool registration and execution (`yarn dev`)
@@ -475,6 +514,7 @@ yarn dxt:pack
 5. **Fix all errors and warnings before declaring success**
 
 ### For Architecture Questions
+
 - Maintain the simple, flat structure
 - Don't over-engineer - keep it beginner-friendly
 - Separate concerns cleanly (one tool per file)
@@ -484,16 +524,19 @@ yarn dxt:pack
 ## Systematic Error Prevention
 
 ### Before Writing Code
+
 - Review existing patterns in the codebase
 - Plan the Zod schema structure first
 - Identify any new dependencies needed
 
 ### During Code Writing
+
 - Follow the exact established patterns
 - Use consistent naming conventions
 - Include proper error handling
 
 ### After Writing Code (MANDATORY)
+
 1. **Run `yarn build`** - fix any compilation errors
 2. **Fix all warnings** - treat warnings as errors
 3. **Test with `yarn dev`** - ensure server starts
@@ -505,32 +548,37 @@ yarn dxt:pack
 ### Common Error Patterns and Fixes
 
 **"Cannot find module './tools/mytool.js'"**
+
 ```bash
 # Check if file exists and has proper export
 # Fix: Add .js extension to import, verify export exists
 ```
 
 **"Property 'z' does not exist"**
+
 ```typescript
 // Fix: Add missing Zod import
 import { z } from 'zod';
 ```
 
 **"Argument of type 'unknown' is not assignable"**
+
 ```typescript
 // Fix: Proper Zod schema with .describe()
 inputSchema: {
-  param: z.string().describe('Parameter description')
+  param: z.string().describe('Parameter description');
 }
 ```
 
 **"Cannot find name 'Server'"**
+
 ```typescript
 // Fix: Update to current API
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 ```
 
 ### For New Tools
+
 1. Ask for the tool's purpose and expected inputs/outputs
 2. Follow the exact patterns established in existing tools
 3. Create comprehensive input validation
@@ -538,12 +586,14 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 5. Update both code and manifest
 
 ### For Debugging
+
 1. Check TypeScript compilation errors first
 2. Validate manifest.json structure
 3. Test tool registration and execution
 4. Verify import/export paths use .js extensions
 
 ### For Architecture Questions
+
 - Maintain the simple, flat structure
 - Don't over-engineer - keep it beginner-friendly
 - Separate concerns cleanly (one tool per file)
@@ -552,6 +602,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 ## Success Criteria
 
 A well-implemented tool should:
+
 - ✅ Compile without TypeScript errors
 - ✅ Follow the established patterns exactly
 - ✅ Include proper error handling

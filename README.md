@@ -21,28 +21,33 @@ orca-mcp/
 ## Setup Instructions
 
 ### 1. Pull the Repository
+
 ```bash
 git clone https://github.com/giraffemedia/orca-mcp.git
 cd orca-mcp
 ```
 
 ### 2. Initialize and Install Dependencies
+
 ```bash
 # Install dependencies
 yarn install
 ```
 
 **Key Dependencies:**
+
 - `@modelcontextprotocol/sdk` - The official MCP TypeScript SDK
 - `@modelcontextprotocol/dxt` - The official Desktop Extension Toolkit
 - `zod` - Schema validation library (required for tool input validation)
 
 ### 3. Build the Project
+
 ```bash
 yarn build
 ```
 
 ### 4. Test Locally
+
 ```bash
 yarn dev
 ```
@@ -68,8 +73,8 @@ export function registerMyTool(server: McpServer) {
       description: 'Description of what this tool does',
       inputSchema: {
         param1: z.string().describe('Description of param1'),
-        param2: z.number().optional().describe('Optional description of param2')
-      }
+        param2: z.number().optional().describe('Optional description of param2'),
+      },
     },
     async ({ param1, param2 }) => {
       // Your tool logic here
@@ -77,9 +82,9 @@ export function registerMyTool(server: McpServer) {
         content: [
           {
             type: 'text',
-            text: `Result: ${param1}`
-          }
-        ]
+            text: `Result: ${param1}`,
+          },
+        ],
       };
     }
   );
@@ -87,6 +92,7 @@ export function registerMyTool(server: McpServer) {
 ```
 
 3. Import and register it in `src/index.ts`:
+
 ```typescript
 import { registerMyTool } from './tools/mytool.js';
 
@@ -95,6 +101,7 @@ registerMyTool(this.server);
 ```
 
 4. Update `manifest.json` to include the new tool:
+
 ```json
 {
   "tools": [
@@ -108,6 +115,7 @@ registerMyTool(this.server);
 ```
 
 5. **Update the changelog:**
+
 ```bash
 # Add changelog entry for your new tool
 yarn changelog:add added "New tool for handling X functionality"
@@ -142,17 +150,21 @@ yarn dxt:validate
 ## Creating a DXT Extension
 
 ### 1. Build the Project
+
 ```bash
 yarn build
 ```
 
 ### 2. Update manifest.json
+
 Edit the `manifest.json` file with your specific details:
+
 - Update `name`, `version`, `description`, `author`
 - Add any user configuration options you need
 - List all your tools
 
 ### 3. Create the DXT File
+
 ```bash
 yarn dxt:pack
 ```
@@ -160,6 +172,7 @@ yarn dxt:pack
 This will create a `.dxt` file in your project's `extensions` directory.
 
 ### 4. Install in Claude Desktop
+
 1. Double-click the `.dxt` file, or
 2. Open Claude Desktop → Settings → Extensions → Install Extension
 3. Select your `.dxt` file
@@ -169,10 +182,12 @@ This will create a `.dxt` file in your project's `extensions` directory.
 Once installed in Claude Desktop, you can use the tools:
 
 **Calculator:**
+
 - "Calculate 15 + 27"
 - "What's 144 divided by 12?"
 
 **Greeting:**
+
 - "Greet John in Spanish"
 - "Say hello to Maria"
 

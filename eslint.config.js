@@ -9,7 +9,7 @@ const prettierConfig = require('eslint-config-prettier');
 module.exports = [
   // Base JavaScript config
   js.configs.recommended,
-  
+
   // TypeScript files
   {
     files: ['src/**/*.ts', 'src/**/*.tsx'],
@@ -41,33 +41,23 @@ module.exports = [
     rules: {
       // Prettier integration
       'prettier/prettier': 'error',
-      
+
       // TypeScript specific rules
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        { argsIgnorePattern: '^_' }
-      ],
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-non-null-assertion': 'warn',
-      
+
       // Import/Export rules
       'import/order': [
         'error',
         {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index'
-          ],
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
           'newlines-between': 'always',
-        }
+        },
       ],
-      
+
       // General code quality
       'no-console': 'off', // Allow console for MCP servers
       'no-debugger': 'error',
@@ -76,10 +66,10 @@ module.exports = [
       'no-var': 'error',
     },
   },
-  
+
   // Prettier config (disables conflicting rules)
   prettierConfig,
-  
+
   // Ignore patterns
   {
     ignores: ['dist/**', 'node_modules/**', '*.js'],

@@ -43,24 +43,26 @@ yarn changelog:add fixed \"Handle edge case in nested objects\"
 
 ### Available Entry Types
 
-| Type | Description | Example |
-|------|-------------|---------|
-| `added` | New features | \"Added caching for JSON queries\" |
-| `changed` | Changes in existing functionality | \"Updated JSONPath library to v2.0\" |
-| `deprecated` | Soon-to-be removed features | \"Deprecated old query syntax\" |
-| `removed` | Removed features | \"Removed legacy parser\" |
-| `fixed` | Bug fixes | \"Fixed parsing of large JSON arrays\" |
-| `security` | Security fixes | \"Fixed potential XSS in error messages\" |
+| Type         | Description                       | Example                                   |
+| ------------ | --------------------------------- | ----------------------------------------- |
+| `added`      | New features                      | \"Added caching for JSON queries\"        |
+| `changed`    | Changes in existing functionality | \"Updated JSONPath library to v2.0\"      |
+| `deprecated` | Soon-to-be removed features       | \"Deprecated old query syntax\"           |
+| `removed`    | Removed features                  | \"Removed legacy parser\"                 |
+| `fixed`      | Bug fixes                         | \"Fixed parsing of large JSON arrays\"    |
+| `security`   | Security fixes                    | \"Fixed potential XSS in error messages\" |
 
 ### Release Preparation
 
 1. **Review changelog entries:**
+
    ```bash
    # View current unreleased entries
    cat CHANGELOG.md
    ```
 
 2. **Prepare for release:**
+
    ```bash
    ./scripts/changelog.sh prepare 1.2.0
    # or
@@ -68,6 +70,7 @@ yarn changelog:add fixed \"Handle edge case in nested objects\"
    ```
 
 3. **Commit the changes:**
+
    ```bash
    git add CHANGELOG.md
    git commit -m \"docs: prepare changelog for v1.2.0\"
@@ -138,25 +141,30 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
+
 - New JSON validation for large files
 - Support for custom JSONPath functions
 
 ### Fixed
+
 - Memory leak in query processing
 - Edge case in nested array parsing
 
 ### Changed
+
 - Updated error messages for better clarity
 
 ## [1.1.0] - 2024-07-20
 
 ### Added
+
 - Initial JSON schema generation
 - Support for large file processing
 
 ## [1.0.0] - 2024-07-15
 
 ### Added
+
 - Initial release
 - JSONPath querying functionality
 - Claude Desktop integration
@@ -171,11 +179,13 @@ All notable changes to this project will be documented in this file.
 ### Writing Good Changelog Entries
 
 **✅ Good:**
+
 - \"Added caching to improve JSON query performance by 3x\"
 - \"Fixed crash when parsing malformed JSON with nested arrays\"
 - \"Changed default timeout from 30s to 60s for large files\"
 
 **❌ Avoid:**
+
 - \"Updated stuff\"
 - \"Fixed bug\"
 - \"Various improvements\"
@@ -215,6 +225,7 @@ yarn run release
 ## 🔧 Customization
 
 You can customize the changelog format by editing:
+
 - `scripts/changelog.sh` - Changelog management script
 - `CHANGELOG.md` - Manual changelog template
 - `.github/workflows/release.yml` - Release workflow integration

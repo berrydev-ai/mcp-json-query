@@ -5,6 +5,7 @@ This document explains how to customize the release notes template for your MCP 
 ## Template Location
 
 The release notes template is located at:
+
 ```
 .github/templates/release-notes.md
 ```
@@ -13,16 +14,16 @@ The release notes template is located at:
 
 You can use these placeholders in your template, which will be automatically replaced during the release process:
 
-| Placeholder | Description | Example |
-|-------------|-------------|---------|
-| `{{VERSION}}` | Release version with 'v' prefix | `v1.2.3` |
-| `{{PACKAGE_VERSION}}` | Package version without prefix | `1.2.3` |
-| `{{PACKAGE_NAME}}` | Package name from package.json | `giraffe-orca-mcp` |
-| `{{DESCRIPTION}}` | Package description from package.json | `Giraffe Orca MCP Server` |
-| `{{CHANGELOG}}` | Auto-generated changelog from git commits | `- Added new feature`<br>`- Fixed bug` |
-| `{{BUILD_DATE}}` | UTC timestamp of build | `2024-01-15 14:30:22 UTC` |
-| `{{COMMIT_SHA}}` | Full git commit hash | `abc123def456...` |
-| `{{COMMIT_SHA_SHORT}}` | Short git commit hash | `abc123d` |
+| Placeholder            | Description                               | Example                                |
+| ---------------------- | ----------------------------------------- | -------------------------------------- |
+| `{{VERSION}}`          | Release version with 'v' prefix           | `v1.2.3`                               |
+| `{{PACKAGE_VERSION}}`  | Package version without prefix            | `1.2.3`                                |
+| `{{PACKAGE_NAME}}`     | Package name from package.json            | `giraffe-orca-mcp`                     |
+| `{{DESCRIPTION}}`      | Package description from package.json     | `Giraffe Orca MCP Server`              |
+| `{{CHANGELOG}}`        | Auto-generated changelog from git commits | `- Added new feature`<br>`- Fixed bug` |
+| `{{BUILD_DATE}}`       | UTC timestamp of build                    | `2024-01-15 14:30:22 UTC`              |
+| `{{COMMIT_SHA}}`       | Full git commit hash                      | `abc123def456...`                      |
+| `{{COMMIT_SHA_SHORT}}` | Short git commit hash                     | `abc123d`                              |
 
 ## Changelog Generation
 
@@ -53,10 +54,12 @@ Add new sections to your template:
 
 ```markdown
 ## 🐛 Bug Fixes
+
 - Fixed JSON parsing for large files
 - Improved error handling
 
 ## ⚡ Performance
+
 - 50% faster JSONPath queries
 - Reduced memory usage
 ```
@@ -67,6 +70,7 @@ Add system requirements or compatibility info:
 
 ```markdown
 ## 🔧 System Requirements
+
 - Node.js >= {{MIN_NODE_VERSION}}
 - Claude Desktop >= 1.0.0
 - Memory: 512MB RAM minimum
@@ -100,19 +104,23 @@ Include visual aids (make sure to add the files to your repo):
 ## Template Structure Best Practices
 
 ### 1. Clear Hierarchy
+
 Use proper heading levels (H1 for title, H2 for main sections, H3 for subsections).
 
 ### 2. Scannable Content
+
 - Use emojis for visual appeal
 - Include tables for structured information
 - Add code blocks for examples
 
 ### 3. User-Focused
+
 - Lead with benefits, not technical details
 - Provide clear installation steps
 - Include usage examples
 
 ### 4. Complete Information
+
 - List all download options
 - Include troubleshooting links
 - Add contact/support information
@@ -149,6 +157,7 @@ For more complex release note generation, you can:
 ## Example Template Variations
 
 ### Minimal Template
+
 ```markdown
 # {{PACKAGE_NAME}} {{VERSION}}
 
@@ -158,21 +167,26 @@ Download: See assets below.
 ```
 
 ### Detailed Template
+
 ```markdown
 # 🦒 {{PACKAGE_NAME}} {{VERSION}}
 
 > {{DESCRIPTION}}
 
 ## What's New
+
 {{CHANGELOG}}
 
 ## Installation
+
 [Detailed installation steps...]
 
 ## Documentation
+
 [Links to docs, examples, etc...]
 
 ## Support
+
 [Contact information...]
 ```
 

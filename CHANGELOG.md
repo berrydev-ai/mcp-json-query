@@ -8,11 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+
 - Fixed changelog header sed escaping for apostrophe characters in release scripts
 
 ## [1.0.1] - 2024-07-21
 
 ### Fixed
+
 - Prepare for release
 
 [1.0.1]: https://github.com/giraffemedia/orca-mcp/releases/tag/v1.0.1
@@ -20,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2024-07-21
 
 ### Added
+
 - Initial release of Giraffe Orca MCP Server
 - JSONPath query tool for querying large JSON files
 - JSON schema generation from JSON files
