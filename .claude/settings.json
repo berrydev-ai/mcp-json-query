@@ -1,0 +1,88 @@
+{
+  "allowedTools": [
+    "Edit",
+    "Create",
+    "Read",
+    "Bash(git add:*)",
+    "Bash(git commit:*)",
+    "Bash(git status:*)",
+    "Bash(git diff:*)",
+    "Bash(git log:*)",
+    "Bash(git branch:*)",
+    "Bash(git checkout:*)",
+    "Bash(uv:*)",
+    "Bash(python:*)",
+    "Bash(pytest:*)",
+    "Bash(npx:*)",
+    "Bash(cat:*)",
+    "Bash(ls:*)",
+    "Bash(cd:*)",
+    "Bash(pwd:*)",
+    "Bash(mkdir:*)",
+    "Bash(touch:*)",
+    "Bash(echo:*)",
+    "Bash(grep:*)",
+    "Bash(find:*)",
+    "Bash(tree:*)",
+    "Bash(which:*)",
+    "Bash(pip:*)",
+    "Bash(curl:*)",
+    "Bash(wget:*)",
+    "Url"
+  ],
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "."
+      ],
+      "description": "Filesystem operations for the current directory"
+    },
+    "brave-search": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {}
+    },
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {}
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "time": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-time"
+      ]
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    }
+  },
+  "customInstructions": "You are helping develop MCP (Model Context Protocol) servers using uv as the package manager. Always follow the patterns and guidelines in CLAUDE.md. When writing code, ensure it follows Python best practices and includes comprehensive error handling. Focus on creating robust, well-tested MCP servers that provide clear and useful tools.",
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)"
+    ],
+    "deny": []
+  }
+}
