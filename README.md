@@ -1,16 +1,17 @@
 # Giraffe Media Orca MCP Server
 
-A clean, minimal TypeScript MCP server project structure for building Desktop Extensions (DXT).
+Model Context Protocol (MCP) server for the Orca platform.
 
 ## Project Structure
 
 ```
-my-mcp-server/
+orca-mcp/
 ├─ src/
 │   ├─ index.ts               # Main server file
 │   └─ tools/
 │       └─ json-query.ts      # JSON query tool
 ├─ dist/                       # Compiled JavaScript (generated)
+├─ extensions/                 # Packaged DXT extensions
 ├─ package.json                # Dependencies and scripts
 ├─ tsconfig.json               # TypeScript configuration
 ├─ manifest.json               # DXT manifest
@@ -21,8 +22,8 @@ my-mcp-server/
 
 ### 1. Pull the Repository
 ```bash
-git clone https://github.com/yourusername/giraffe-orca-mcp.git
-cd giraffe-orca-mcp
+git clone https://github.com/giraffemedia/orca-mcp.git
+cd orca-mcp
 ```
 
 ### 2. Initialize and Install Dependencies
@@ -208,11 +209,6 @@ Access user config in your tools via server context.
 
 The server can also provide prompts and resources. Add handlers in `src/index.ts` similar to the tool handlers.
 
-## Next Steps
+## LICENSE
 
-1. Build your custom tools
-2. Test thoroughly
-3. Package as DXT
-4. Distribute to users
-
-This structure scales well - just add new tool files and register them!
+This is a private project owned by Giraffe Media Group.
