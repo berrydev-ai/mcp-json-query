@@ -3,7 +3,6 @@
   "version": "1.0.3",
   "description": "Giraffe Meida Orca MCP Server",
   "license": "UNLICENSED",
-  "private": true,
   "main": "dist/index.js",
   "scripts": {
     "build": "npm run quality && tsc && shx chmod +x dist/*.js",
