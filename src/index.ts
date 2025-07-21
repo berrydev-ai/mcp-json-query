@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
+import { parseArgs } from 'node:util';
+
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { parseArgs } from 'node:util';
 
 // Import your tools
 import { registerJsonQueryTool, registerJsonSchemaGeneratorTool } from './tools/json-query.js';
