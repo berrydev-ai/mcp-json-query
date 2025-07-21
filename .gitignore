@@ -24,3 +24,6 @@ logs/
 
 # Claude Local
 .claude/settings.local.json
+
+# Local workspace (for testing/debugging)
+workspace/

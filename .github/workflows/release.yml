@@ -1,0 +1,198 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers on version tags like v1.0.0, v2.1.3, etc.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch full history for changelog generation
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'yarn'
+
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+
+    - name: Run quality checks
+      run: yarn run quality
+
+    - name: Build project
+      run: yarn run build
+
+    - name: Create DXT package
+      run: yarn run dxt:pack
+
+    - name: Create distribution tarball
+      run: |
+        npm pack
+        ls -la *.tgz
+
+    - name: Get package info
+      id: package-info
+      run: |
+        PACKAGE_NAME=$(node -p "require('./package.json').name")
+        PACKAGE_VERSION=$(node -p "require('./package.json').version")
+        echo "name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+        echo "version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+
+    - name: Set release version
+      id: release-version
+      run: |
+        if [ "${{ github.event.inputs.version }}" != "" ]; then
+          VERSION="v${{ github.event.inputs.version }}"
+        else
+          VERSION=${GITHUB_REF#refs/tags/}
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Release version: $VERSION"
+
+    - name: Generate changelog
+      id: changelog
+      run: |
+        # Get the previous tag for changelog generation
+        PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+        
+        if [ -z "$PREVIOUS_TAG" ]; then
+          echo "## 🎉 Initial Release" > changelog.md
+          echo "" >> changelog.md
+          echo "This is the first release of Giraffe Orca MCP Server!" >> changelog.md
+        else
+          echo "## 📝 Changes since $PREVIOUS_TAG" > changelog.md
+          echo "" >> changelog.md
+          
+          # Generate changelog from commits
+          git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s" --no-merges | head -20 >> changelog.md
+          
+          # If no commits, add a generic message
+          if [ ! -s changelog.md ] || [ $(wc -l < changelog.md) -le 2 ]; then
+            echo "## 📝 Updates" > changelog.md
+            echo "" >> changelog.md
+            echo "- Various improvements and bug fixes" >> changelog.md
+          fi
+        fi
+        
+        # Store changelog content for later use
+        echo "changelog_content<<EOF" >> $GITHUB_OUTPUT
+        cat changelog.md >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Generate release notes from template
+      run: |
+        # Check if template exists, create fallback if not
+        if [ -f ".github/templates/release-notes.md" ]; then
+          TEMPLATE=$(cat .github/templates/release-notes.md)
+        else
+          echo "Template not found, using fallback"
+          TEMPLATE="# {{PACKAGE_NAME}} {{VERSION}}\n\n{{DESCRIPTION}}\n\n{{CHANGELOG}}\n\n## Downloads\n\nSee assets below for downloadable packages."
+        fi
+        
+        # Get package description (escape for sed)
+        DESCRIPTION=$(node -p "require('./package.json').description" | sed 's/[\\&/]/\\&/g')
+        
+        # Get current date
+        BUILD_DATE=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        
+        # Get commit SHA (short and full)
+        COMMIT_SHA="${{ github.sha }}"
+        COMMIT_SHA_SHORT="${COMMIT_SHA:0:7}"
+        
+        # Replace placeholders in template (escape special characters for sed)
+        VERSION_ESC=$(echo "${{ steps.release-version.outputs.version }}" | sed 's/[\\&/]/\\&/g')
+        PACKAGE_VERSION_ESC=$(echo "${{ steps.package-info.outputs.version }}" | sed 's/[\\&/]/\\&/g')
+        PACKAGE_NAME_ESC=$(echo "${{ steps.package-info.outputs.name }}" | sed 's/[\\&/]/\\&/g')
+        BUILD_DATE_ESC=$(echo "$BUILD_DATE" | sed 's/[\\&/]/\\&/g')
+        
+        echo "$TEMPLATE" | \
+          sed "s/{{VERSION}}/$VERSION_ESC/g" | \
+          sed "s/{{PACKAGE_VERSION}}/$PACKAGE_VERSION_ESC/g" | \
+          sed "s/{{PACKAGE_NAME}}/$PACKAGE_NAME_ESC/g" | \
+          sed "s/{{DESCRIPTION}}/$DESCRIPTION/g" | \
+          sed "s/{{BUILD_DATE}}/$BUILD_DATE_ESC/g" | \
+          sed "s/{{COMMIT_SHA}}/$COMMIT_SHA/g" | \
+          sed "s/{{COMMIT_SHA_SHORT}}/$COMMIT_SHA_SHORT/g" | \
+          sed "/{{CHANGELOG}}/r changelog.md" | \
+          sed "/{{CHANGELOG}}/d" > release-notes.md
+        
+        echo "Generated release notes:"
+        echo "========================"
+        head -50 release-notes.md  # Show first 50 lines to avoid too much output
+
+    - name: Create GitHub Release
+      id: create-release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.release-version.outputs.version }}
+        release_name: ${{ steps.package-info.outputs.name }} ${{ steps.release-version.outputs.version }}
+        body_path: release-notes.md
+        draft: false
+        prerelease: ${{ github.event.inputs.prerelease || false }}
+
+    - name: Upload DXT Package
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        asset_path: ./extensions/${{ steps.package-info.outputs.name }}-${{ steps.package-info.outputs.version }}.dxt
+        asset_name: ${{ steps.package-info.outputs.name }}-${{ steps.package-info.outputs.version }}.dxt
+        asset_content_type: application/octet-stream
+
+    - name: Upload NPM Package
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        asset_path: ./${{ steps.package-info.outputs.name }}-${{ steps.package-info.outputs.version }}.tgz
+        asset_name: ${{ steps.package-info.outputs.name }}-${{ steps.package-info.outputs.version }}.tgz
+        asset_content_type: application/gzip
+
+    - name: Publish to GitHub Registry (optional)
+      continue-on-error: true
+      run: |
+        echo "@berrydev-ai:registry=https://npm.pkg.github.com" >> .npmrc
+        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
+        npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Summary
+      run: |
+        echo "## 🎉 Release Created Successfully!" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Release:** ${{ steps.release-version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Package:** ${{ steps.package-info.outputs.name }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Version:** ${{ steps.package-info.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📦 Available Downloads:" >> $GITHUB_STEP_SUMMARY
+        echo "- DXT Package: \`${{ steps.package-info.outputs.name }}-${{ steps.package-info.outputs.version }}.dxt\`" >> $GITHUB_STEP_SUMMARY
+        echo "- NPM Package: \`${{ steps.package-info.outputs.name }}-${{ steps.package-info.outputs.version }}.tgz\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "[View Release](${{ steps.create-release.outputs.html_url }})" >> $GITHUB_STEP_SUMMARY

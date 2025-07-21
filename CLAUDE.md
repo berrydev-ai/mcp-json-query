@@ -16,14 +16,14 @@ This is a clean, minimal TypeScript MCP server project that compiles to Node.js 
 ## Project Structure
 
 ```
-my-mcp-server/
+giraffe-orca-mcp/
 ├── src/
-│   ├── index.ts                 # Main server entry point
+│   ├── index.ts               # Main server entry point
 │   └── tools/
-│       ├── calculator.ts        # Example calculator tool
-│       └── greeting.ts          # Example greeting tool
-├── dist/                        # Compiled JavaScript output
-├── package.json                 # NPM configuration and scripts
+│       ├── calculator.ts      # Example calculator tool
+│       └── greeting.ts        # Example greeting tool
+├── dist/                       # Compiled JavaScript output
+├── package.json                # NPM configuration and scripts
 ├── tsconfig.json               # TypeScript compiler configuration
 ├── manifest.json               # DXT extension manifest
 ├── .gitignore                  # Git ignore rules

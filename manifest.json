@@ -1,29 +1,91 @@
 {
   "dxt_version": "1.0",
-  "name": "my-mcp-server",
+  "name": "giraffe-orca-mcp",
+  "display_name": "Giraffe Orca MCP Server",
   "version": "1.0.0",
-  "description": "A simple MCP server with calculator and greeting tools",
+  "license": "License owned by Giraffe Media Group",
+  "description": "MCP server for the Giraffe Media Orca platform",
+  "long_description": "Tools and utilities for working with the Orca platform, including JSONPath queries, JSON Schema generation, and more.",
   "author": {
-    "name": "Your Name",
-    "email": "your.email@example.com"
+    "name": "Eric Berry",
+    "email": "eric@berrydev.ai"
   },
-  "license": "MIT",
   "server": {
     "type": "node",
     "entry_point": "dist/index.js",
     "mcp_config": {
       "command": "node",
-      "args": ["dist/index.js"]
+      "args": [
+        "${__dirname}/dist/index.js",
+        "--verbose=${user_config.verbose_logging}",
+        "--max-results=${user_config.max_results}",
+        "--workspace=${user_config.workspace_directory}"
+      ],
+      "env": {
+        "API_KEY": "${user_config.api_key}",
+        "DEBUG": "${user_config.debug_mode}"
+      }
     }
   },
+  "icon": "icon.png",
   "tools": [
     {
-      "name": "calculator",
-      "description": "Perform basic arithmetic operations"
+      "name": "json_query",
+      "description": "Perform JSONPath queries on JSON files"
     },
     {
-      "name": "greeting",
-      "description": "Generate personalized greetings"
+      "name": "generate_json_schema",
+      "description": "Generate JSON Schema from JSON files"
     }
-  ]
+  ],
+  "user_config": {
+    "api_key": {
+      "type": "string",
+      "title": "API Key",
+      "description": "Your API key for authentication (example of sensitive string)",
+      "sensitive": true,
+      "required": true
+    },
+    "verbose_logging": {
+      "type": "boolean",
+      "title": "Verbose Logging",
+      "description": "Enable detailed logging output",
+      "default": false,
+      "required": false
+    },
+    "max_results": {
+      "type": "number",
+      "title": "Maximum Results",
+      "description": "Maximum number of results to return",
+      "default": 10,
+      "min": 1,
+      "max": 500,
+      "required": false
+    },
+    "workspace_directory": {
+      "type": "directory",
+      "title": "Workspace Directory",
+      "description": "Directory to use as workspace which contains your JSON file(s)",
+      "default": "${HOME}/Documents",
+      "required": false
+    },
+    "debug_mode": {
+      "type": "string",
+      "title": "Debug Mode",
+      "description": "Set debug level (example of non-sensitive string)",
+      "default": "info",
+      "required": false
+    }
+  },
+  "compatibility": {
+    "claude_desktop": ">=0.10.0",
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
+    "runtimes": {
+      "node": ">=16.0.0"
+    }
+  }
 }

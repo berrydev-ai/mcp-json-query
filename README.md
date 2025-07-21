@@ -1,55 +1,49 @@
-# Simple MCP Server Project
+# Giraffe Media Orca MCP Server
 
 A clean, minimal TypeScript MCP server project structure for building Desktop Extensions (DXT).
-
-**Updated for MCP SDK v1.16.0** - Uses the latest `McpServer` API with Zod schemas instead of the legacy `Server` API.
 
 ## Project Structure
 
 ```
 my-mcp-server/
-├── src/
-│   ├── index.ts                 # Main server file
-│   └── tools/
-│       ├── calculator.ts        # Calculator tool
-│       └── greeting.ts          # Greeting tool
-├── dist/                        # Compiled JavaScript (generated)
-├── package.json                 # Dependencies and scripts
-├── tsconfig.json               # TypeScript configuration
-├── manifest.json               # DXT manifest
-└── README.md                   # This file
+├─ src/
+│   ├─ index.ts               # Main server file
+│   └─ tools/
+│       └─ json-query.ts      # JSON query tool
+├─ dist/                       # Compiled JavaScript (generated)
+├─ package.json                # Dependencies and scripts
+├─ tsconfig.json               # TypeScript configuration
+├─ manifest.json               # DXT manifest
+└─ README.md                   # This file
 ```
 
 ## Setup Instructions
 
-### 1. Create Project Directory
+### 1. Pull the Repository
 ```bash
-mkdir my-mcp-server
-cd my-mcp-server
+git clone https://github.com/yourusername/giraffe-orca-mcp.git
+cd giraffe-orca-mcp
 ```
 
 ### 2. Initialize and Install Dependencies
 ```bash
-# Copy all the provided files into your project directory
-# Then install dependencies:
-npm install
-
-# Install the DXT CLI globally (if not already installed)
-npm install -g @anthropic-ai/dxt
+# Install dependencies
+yarn install
 ```
 
 **Key Dependencies:**
 - `@modelcontextprotocol/sdk` - The official MCP TypeScript SDK
+- `@modelcontextprotocol/dxt` - The official Desktop Extension Toolkit
 - `zod` - Schema validation library (required for tool input validation)
 
 ### 3. Build the Project
 ```bash
-npm run build
+yarn build
 ```
 
 ### 4. Test Locally
 ```bash
-npm run dev
+yarn dev
 ```
 
 The server will start and listen on stdin/stdout. You can test it by sending JSON-RPC messages or integrate it with Claude Desktop directly.
@@ -116,20 +110,20 @@ registerMyTool(this.server);
 
 ```bash
 # Clean build
-npm run clean && npm run build
+yarn clean && yarn build
 
 # Development build and run
-npm run dev
+yarn dev
 
 # Validate your manifest
-npm run dxt:validate
+yarn dxt:validate
 ```
 
 ## Creating a DXT Extension
 
 ### 1. Build the Project
 ```bash
-npm run build
+yarn build
 ```
 
 ### 2. Update manifest.json
@@ -140,10 +134,10 @@ Edit the `manifest.json` file with your specific details:
 
 ### 3. Create the DXT File
 ```bash
-npm run dxt:pack
+yarn dxt:pack
 ```
 
-This will create a `.dxt` file in your project directory.
+This will create a `.dxt` file in your project's `extensions` directory.
 
 ### 4. Install in Claude Desktop
 1. Double-click the `.dxt` file, or
