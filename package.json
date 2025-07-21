@@ -1,6 +1,6 @@
 {
   "name": "@giraffemedia/orca-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Giraffe Meida Orca MCP Server",
   "license": "UNLICENSED",
   "private": true,
@@ -62,8 +62,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.5.3",
     "prettier": "^3.2.5",
-    "typescript": "^5.0.0",
-    "shx": "^0.4.0"
+    "shx": "^0.4.0",
+    "typescript": "^5.0.0"
   },
   "files": [
     "dist/**/*",
