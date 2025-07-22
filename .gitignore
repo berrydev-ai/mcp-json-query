@@ -22,8 +22,11 @@ Thumbs.db
 logs/
 *.log
 
+# Local DXT builds
+extensions/*.dxt
+
 # Claude Local
 .claude/settings.local.json
 
 # Local workspace (for testing/debugging)
-workspace/
+workspace/**/*.*

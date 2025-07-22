@@ -1,11 +1,12 @@
 import { createWriteStream, promises as fs } from 'fs';
-import { dirname } from 'path';
+import { dirname, join, basename, resolve } from 'path';
 import { Readable } from 'stream';
 
 import { S3Client, GetObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3';
 
 export interface S3SyncOptions {
   verbose?: boolean;
+  preserveDirectoryStructure?: boolean;
 }
 
 export interface S3FileInfo {
@@ -15,12 +16,20 @@ export interface S3FileInfo {
   size?: number;
 }
 
+export interface S3SyncResult {
+  wasDownloaded: boolean;
+  localPath: string;
+  filename: string;
+}
+
 export class S3SyncService {
   private s3Client: S3Client;
   private verbose: boolean;
+  private preserveDirectoryStructure: boolean;
 
   constructor(options: S3SyncOptions = {}) {
     this.verbose = options.verbose || false;
+    this.preserveDirectoryStructure = options.preserveDirectoryStructure || false;
 
     // Initialize S3 client with credentials from environment or config
     this.s3Client = new S3Client({
@@ -28,9 +37,9 @@ export class S3SyncService {
       credentials:
         process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY
           ? {
-              accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-              secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-            }
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+          }
           : undefined, // Let SDK handle credentials (IAM roles, profiles, etc.)
     });
   }
@@ -58,6 +67,56 @@ export class S3SyncService {
     }
 
     return { bucket, key };
+  }
+
+  /**
+   * Validate that the root directory exists and is writable
+   */
+  private async validateRootDirectory(rootPath: string): Promise<void> {
+    try {
+      // Check if directory exists
+      const stats = await fs.stat(rootPath);
+      if (!stats.isDirectory()) {
+        throw new Error(`Root path is not a directory: ${rootPath}`);
+      }
+
+      // Test write permissions by creating a temporary file
+      const testFile = join(rootPath, '.mcp-write-test');
+      try {
+        await fs.writeFile(testFile, 'test');
+        await fs.unlink(testFile);
+      } catch (error) {
+        throw new Error(`Root directory is not writable: ${rootPath}`);
+      }
+
+      if (this.verbose) {
+        console.error(`✅ Root directory validated: ${rootPath}`);
+      }
+    } catch (error) {
+      const err = error as { code?: string; message: string };
+      if (err.code === 'ENOENT') {
+        throw new Error(`Root directory does not exist: ${rootPath}`);
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Generate local file path based on S3 key and options
+   */
+  private generateLocalPath(rootPath: string, s3Key: string): string {
+    if (this.preserveDirectoryStructure) {
+      // Sanitize the S3 key to prevent directory traversal
+      const sanitizedKey = s3Key.replace(/\.\./g, '').replace(/^\/+/, '');
+      return resolve(join(rootPath, sanitizedKey));
+    } else {
+      // Just use the filename
+      const filename = basename(s3Key);
+      if (!filename) {
+        throw new Error(`Cannot extract filename from S3 key: ${s3Key}`);
+      }
+      return join(rootPath, filename);
+    }
   }
 
   /**
@@ -158,8 +217,17 @@ export class S3SyncService {
           resolve();
         });
 
-        writeStream.on('error', reject);
-        readableStream.on('error', reject);
+        writeStream.on('error', (error) => {
+          // Clean up partial download on error
+          fs.unlink(localPath).catch(() => { }); // Ignore cleanup errors
+          reject(error);
+        });
+
+        readableStream.on('error', (error) => {
+          // Clean up partial download on error
+          fs.unlink(localPath).catch(() => { }); // Ignore cleanup errors
+          reject(error);
+        });
       });
     } catch (error) {
       const err = error as { message: string };
@@ -168,7 +236,7 @@ export class S3SyncService {
   }
 
   /**
-   * Sync file from S3 to local workspace
+   * Sync file from S3 to local path
    * Returns true if file was downloaded, false if no sync was needed
    */
   async syncFile(s3Uri: string, localPath: string): Promise<boolean> {
@@ -213,6 +281,59 @@ export class S3SyncService {
     } catch (error) {
       const err = error as { message: string };
       throw new Error(`S3 sync failed: ${err.message}`);
+    }
+  }
+
+  /**
+   * Sync file from S3 to MCP root directory
+   * Handles path construction, validation, error handling, and logging
+   */
+  async syncToRoot(s3Uri: string, rootPath: string): Promise<S3SyncResult> {
+    try {
+      if (this.verbose) {
+        console.error(`🌊 Starting S3 sync process for ${s3Uri}`);
+      }
+
+      // Validate root directory first
+      await this.validateRootDirectory(rootPath);
+
+      // Parse S3 URI to get the key
+      const { key } = this.parseS3Uri(s3Uri);
+
+      // Generate local path based on options
+      const localPath = this.generateLocalPath(rootPath, key);
+      const filename = basename(localPath);
+
+      // Ensure the generated path is within the root directory (security check)
+      const resolvedLocalPath = resolve(localPath);
+      const resolvedRootPath = resolve(rootPath);
+
+      if (!resolvedLocalPath.startsWith(resolvedRootPath + '/') && resolvedLocalPath !== resolvedRootPath) {
+        throw new Error(`Generated path is outside root directory: ${resolvedLocalPath}`);
+      }
+
+      const wasDownloaded = await this.syncFile(s3Uri, localPath);
+
+      if (wasDownloaded) {
+        console.error(`✅ File synchronized from S3: ${filename}`);
+      } else if (this.verbose) {
+        console.error(`✅ Local file is already up to date: ${filename}`);
+      }
+
+      return { wasDownloaded, localPath, filename };
+
+    } catch (error) {
+      const err = error as { message: string };
+      const errorMessage = `S3 sync failed: ${err.message}`;
+
+      if (this.verbose) {
+        console.error(`❌ ${errorMessage}`);
+        console.error('⚠️  S3 sync failed - server will continue without synced file');
+      } else {
+        console.error(`❌ ${errorMessage}`);
+      }
+
+      throw new Error(errorMessage);
     }
   }
 

@@ -18,8 +18,8 @@ You can use these placeholders in your template, which will be automatically rep
 | ---------------------- | ----------------------------------------- | -------------------------------------- |
 | `{{VERSION}}`          | Release version with 'v' prefix           | `v1.2.3`                               |
 | `{{PACKAGE_VERSION}}`  | Package version without prefix            | `1.2.3`                                |
-| `{{PACKAGE_NAME}}`     | Package name from package.json            | `giraffe-orca-mcp`                     |
-| `{{DESCRIPTION}}`      | Package description from package.json     | `Giraffe Orca MCP Server`              |
+| `{{PACKAGE_NAME}}`     | Package name from package.json            | `mcp-json-query`                       |
+| `{{DESCRIPTION}}`      | Package description from package.json     | `JSON Query MCP Server`                |
 | `{{CHANGELOG}}`        | Auto-generated changelog from git commits | `- Added new feature`<br>`- Fixed bug` |
 | `{{BUILD_DATE}}`       | UTC timestamp of build                    | `2024-01-15 14:30:22 UTC`              |
 | `{{COMMIT_SHA}}`       | Full git commit hash                      | `abc123def456...`                      |
@@ -133,7 +133,7 @@ Before releasing, you can test your template locally:
 # Preview the template with example data
 cat .github/templates/release-notes.md | \\
   sed 's/{{VERSION}}/v1.0.0/g' | \\
-  sed 's/{{PACKAGE_NAME}}/giraffe-orca-mcp/g' | \\
+  sed 's/{{PACKAGE_NAME}}/mcp-json-query/g' | \\
   sed 's/{{CHANGELOG}}/- Test changelog entry/g'
 ```
 

@@ -1,31 +1,29 @@
 #!/usr/bin/env node
 
-import { parseArgs } from 'node:util';
-
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
 // Import your tools
 import { registerJsonQueryTool, registerJsonSchemaGeneratorTool } from './tools/json-query.js';
 import { S3SyncService } from './services/s3-sync.js';
-import { join } from 'path';
+import { parseCliArgs } from './utils/cli.js'
 
 interface ServerOptions {
   verbose: boolean;
   maxResults: number;
-  workspace: string;
   fileUri?: string;
 }
 
-class OrcaMCPServer {
+class JSONQueryMCPServer {
   private server: McpServer;
   private options: ServerOptions;
+  private syncCompleted = false;
 
   constructor(options: ServerOptions) {
     this.options = options;
 
     this.server = new McpServer({
-      name: 'my-mcp-server',
+      name: 'mcp-json-query',
       version: '1.0.0',
     });
 
@@ -38,15 +36,28 @@ class OrcaMCPServer {
     }
   }
 
+  private getTargetDirectory(): string {
+    // For MCP servers, the client typically controls where files should be placed
+    // In most cases, this will be the current working directory or a directory
+    // that the client has specified as the workspace root
+
+    const targetDir = process.cwd();
+
+    if (this.options.verbose) {
+      console.error(`Using target directory: ${targetDir}`);
+    }
+
+    return targetDir;
+  }
+
   private registerTools() {
-    // Register your tools here
     registerJsonQueryTool(this.server);
     registerJsonSchemaGeneratorTool(this.server);
   }
 
   async run() {
-    // Perform S3 sync if file-uri is provided
-    if (this.options.fileUri && S3SyncService.isS3Uri(this.options.fileUri)) {
+    // Sync S3 file before starting the server
+    if (this.options.fileUri) {
       await this.syncFromS3();
     }
 
@@ -64,82 +75,40 @@ class OrcaMCPServer {
   }
 
   private async syncFromS3(): Promise<void> {
-    if (!this.options.fileUri) {
-      return;
+    if (!this.options.fileUri || this.syncCompleted) return;
+
+    if (!S3SyncService.isS3Uri(this.options.fileUri)) {
+      throw new Error(`Invalid S3 URI: ${this.options.fileUri}`);
     }
 
     try {
-      const s3Sync = new S3SyncService({ verbose: this.options.verbose });
-
-      // Extract filename from S3 URI for local path
-      const s3UriParts = this.options.fileUri.split('/');
-      const filename = s3UriParts[s3UriParts.length - 1];
-      const localPath = join(this.options.workspace, filename);
+      const targetDir = this.getTargetDirectory();
+      const s3Sync = new S3SyncService({
+        verbose: this.options.verbose,
+        preserveDirectoryStructure: false
+      });
 
       if (this.options.verbose) {
-        console.error(`🌊 Starting S3 sync process for ${this.options.fileUri}`);
+        console.error(`Syncing ${this.options.fileUri} to ${targetDir}`);
       }
 
-      const wasDownloaded = await s3Sync.syncFile(this.options.fileUri, localPath);
+      await s3Sync.syncToRoot(this.options.fileUri, targetDir);
+      this.syncCompleted = true;
 
-      if (wasDownloaded) {
-        console.error(`✅ File synchronized from S3: ${filename}`);
-      } else if (this.options.verbose) {
-        console.error(`✅ Local file is already up to date: ${filename}`);
+      if (this.options.verbose) {
+        console.error('S3 sync completed successfully');
       }
-
     } catch (error) {
-      const err = error as { message: string };
-      console.error(`❌ S3 sync failed: ${err.message}`);
-
-      // Don't exit - continue with server startup using existing local file if available
-      if (this.options.verbose) {
-        console.error('⚠️  Continuing with server startup - will use existing local files if available');
-      }
+      console.error('S3 sync failed:', error);
+      console.error('Server will continue without S3 data');
+      // Don't throw - allow server to continue without S3 data
     }
-  }
-}
-
-// Parse command line arguments
-function parseCliArgs(): ServerOptions {
-  try {
-    const { values } = parseArgs({
-      args: process.argv.slice(2),
-      options: {
-        verbose: {
-          type: 'string',
-          default: 'false',
-        },
-        'max-results': {
-          type: 'string',
-          default: '100',
-        },
-        workspace: {
-          type: 'string',
-          default: './workspace',
-        },
-        'file-uri': {
-          type: 'string',
-        },
-      },
-      allowPositionals: false,
-    });
-
-    return {
-      verbose: values.verbose === 'true',
-      maxResults: parseInt(values['max-results'] as string, 10),
-      workspace: values.workspace as string,
-      fileUri: values['file-uri'] as string | undefined,
-    };
-  } catch (error) {
-    console.error('Error parsing arguments:', error);
-    process.exit(1);
   }
 }
 
 // Start the server
 const options = parseCliArgs();
-const server = new OrcaMCPServer(options);
+const server = new JSONQueryMCPServer(options);
 server.run().catch((error) => {
   console.error('Server error:', error);
   process.exit(1);

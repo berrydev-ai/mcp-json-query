@@ -19,7 +19,7 @@ The `release.sh` script automates the process of creating releases with download
 ./scripts/release.sh major
 
 # You can also use the npm script
-yarn run release
+pnpm run release
 ```
 
 ### What it does

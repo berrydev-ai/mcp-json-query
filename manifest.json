@@ -1,29 +1,27 @@
 {
   "dxt_version": "1.0",
-  "name": "giraffe-orca-mcp",
-  "display_name": "Giraffe Orca MCP Server",
+  "name": "mcp-json-query",
+  "display_name": "JSON Query MCP Server",
   "version": "1.0.0",
-  "license": "License owned by Giraffe Media Group",
-  "description": "MCP server for the Giraffe Media Orca platform",
-  "long_description": "Tools and utilities for working with the Orca platform, including JSONPath queries, JSON Schema generation, and more.",
+  "license": "MIT",
+  "description": "MCP server for querying JSON files with S3 sync support",
+  "long_description": "Tools and utilities for working with JSON files, including JSONPath queries and JSON Schema generation. Automatically syncs JSON files from S3 to your MCP client's workspace directory.",
   "author": {
     "name": "Eric Berry",
     "email": "eric@berrydev.ai"
   },
   "server": {
     "type": "node",
-    "entry_point": "dist/index.js",
+    "entry_point": "build/index.js",
     "mcp_config": {
       "command": "node",
       "args": [
-        "${__dirname}/dist/index.js",
+        "${__dirname}/build/index.js",
         "--verbose=${user_config.verbose_logging}",
-        "--max-results=${user_config.max_results}",
-        "--workspace=${user_config.workspace_directory}",
-        "--file-uri=${user_config.file_uri}"
+        "--s3-uri=${user_config.s3_uri}",
+        "--max-results=${user_config.max_results}"
       ],
       "env": {
-        "API_KEY": "${user_config.api_key}",
         "DEBUG": "${user_config.debug_mode}",
         "AWS_ACCESS_KEY_ID": "${user_config.aws_access_key_id}",
         "AWS_SECRET_ACCESS_KEY": "${user_config.aws_secret_access_key}",
@@ -43,13 +41,6 @@
     }
   ],
   "user_config": {
-    "api_key": {
-      "type": "string",
-      "title": "API Key",
-      "description": "Your API key for authentication (example of sensitive string)",
-      "sensitive": true,
-      "required": true
-    },
     "verbose_logging": {
       "type": "boolean",
       "title": "Verbose Logging",
@@ -57,47 +48,38 @@
       "default": false,
       "required": false
     },
-    "max_results": {
-      "type": "number",
-      "title": "Maximum Results",
-      "description": "Maximum number of results to return",
-      "default": 10,
-      "min": 1,
-      "max": 500,
+    "s3_uri": {
+      "type": "string",
+      "title": "S3 URI",
+      "description": "S3 URI of the JSON data file to sync (e.g., s3://bucket/path/file.json). Leave empty to work with existing local files.",
+      "default": "",
       "required": false
     },
-    "workspace_directory": {
-      "type": "directory",
-      "title": "Workspace Directory",
-      "description": "Directory to use as workspace which contains your JSON file(s)",
-      "default": "${HOME}/Documents",
+    "max_results": {
+      "type": "number",
+      "title": "Max Results",
+      "description": "Maximum number of results to return from queries",
+      "default": 100,
       "required": false
     },
     "debug_mode": {
       "type": "string",
       "title": "Debug Mode",
-      "description": "Set debug level (example of non-sensitive string)",
+      "description": "Set debug level for troubleshooting",
       "default": "info",
-      "required": false
-    },
-    "file_uri": {
-      "type": "string",
-      "title": "File URI",
-      "description": "S3 URI of the JSON data file (e.g., s3://bucket/path/file.json)",
-      "default": "",
       "required": false
     },
     "aws_access_key_id": {
       "type": "string",
       "title": "AWS Access Key ID",
-      "description": "AWS Access Key for S3 access (leave empty to use environment/IAM)",
+      "description": "AWS Access Key for S3 access (leave empty to use environment/IAM credentials)",
       "sensitive": true,
       "required": false
     },
     "aws_secret_access_key": {
       "type": "string",
       "title": "AWS Secret Access Key",
-      "description": "AWS Secret Access Key for S3 access (leave empty to use environment/IAM)",
+      "description": "AWS Secret Access Key for S3 access (leave empty to use environment/IAM credentials)",
       "sensitive": true,
       "required": false
     },
@@ -111,9 +93,17 @@
   },
   "compatibility": {
     "claude_desktop": ">=0.10.0",
-    "platforms": ["darwin", "win32", "linux"],
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
     "runtimes": {
       "node": ">=16.0.0"
     }
+  },
+  "mcp_features": {
+    "filesystem_access": true,
+    "uses_roots": true
   }
 }

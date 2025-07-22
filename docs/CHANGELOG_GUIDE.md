@@ -37,8 +37,8 @@ Add changelog entries as you work:
 ./scripts/changelog.sh add fixed \"Memory leak in JSONPath queries\"
 ./scripts/changelog.sh add changed \"Improved error messages for malformed JSON\"
 
-# Or use yarn
-yarn changelog:add fixed \"Handle edge case in nested objects\"
+# Or use pnpm
+pnpm changelog:add fixed \"Handle edge case in nested objects\"
 ```
 
 ### Available Entry Types
@@ -66,7 +66,7 @@ yarn changelog:add fixed \"Handle edge case in nested objects\"
    ```bash
    ./scripts/changelog.sh prepare 1.2.0
    # or
-   yarn changelog:prepare 1.2.0
+   pnpm changelog:prepare 1.2.0
    ```
 
 3. **Commit the changes:**
@@ -209,17 +209,17 @@ All notable changes to this project will be documented in this file.
 
 ```bash
 # View help
-yarn changelog:help
+pnpm changelog:help
 
 # Add entries
-yarn changelog:add added \"New feature description\"
-yarn changelog:add fixed \"Bug fix description\"
+pnpm changelog:add added \"New feature description\"
+pnpm changelog:add fixed \"Bug fix description\"
 
 # Prepare release
-yarn changelog:prepare 1.2.0
+pnpm changelog:prepare 1.2.0
 
 # Create release (will use manual changelog if available)
-yarn run release
+pnpm run release
 ```
 
 ## 🔧 Customization

@@ -1,8 +1,8 @@
 {
-  "name": "@giraffemedia/orca-mcp",
-  "version": "1.0.3",
-  "description": "Giraffe Meida Orca MCP Server",
-  "license": "UNLICENSED",
+  "name": "@berrydev-ai/mcp-json-query",
+  "version": "1.0.0",
+  "description": "JSON Query MCP Server",
+  "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
     "build": "npm run quality && tsc && shx chmod +x dist/*.js",
@@ -20,7 +20,7 @@
     "dxt:init": "dxt init",
     "dxt:pack": "npm run build && npm run dxt:validate && dxt pack . ./extensions/$npm_package_name-$npm_package_version.dxt",
     "dxt:validate": "dxt validate manifest.json",
-    "inspector": "npm run build && npx @modelcontextprotocol/inspector dist/index.js --verbose=true --max-results=1000 --workspace=./workspace --file-uri=s3://giraffe-media-webcontent/mcp-data/orca.json",
+    "inspector": "npm run build && npx @modelcontextprotocol/inspector dist/index.js --verbose=true --workspace=./workspace",
     "version:patch": "npm version patch",
     "version:minor": "npm version minor",
     "version:major": "npm version major",
@@ -28,19 +28,16 @@
     "release:minor": "npm run version:minor && npm run dxt:pack",
     "release:major": "npm run version:major && npm run dxt:pack",
     "release": "./scripts/release.sh",
-    "changelog:add": "./scripts/changelog.sh add",
+    "changelog:add": "./scripts/changeloG.sh add",
     "changelog:prepare": "./scripts/changelog.sh prepare",
     "changelog:help": "./scripts/changelog.sh help"
   },
   "bin": {
-    "orca-mcp": "./dist/index.js"
+    "mcp-json-query": "./dist/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/giraffemedia/orca-mcp.git"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "url": "https://github.com/berrydev-ai/mcp-json-query.git"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.850.0",

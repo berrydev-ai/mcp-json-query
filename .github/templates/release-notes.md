@@ -44,11 +44,11 @@ npm install @giraffemedia/{{PACKAGE_NAME}}
 ### Option 3: Direct from Source
 
 ```bash
-git clone https://github.com/giraffemedia/orca-mcp.git
-cd giraffe-orca-mcp
-yarn install
-yarn build
-yarn dxt:pack
+git clone https://github.com/berrydev-ai/mcp-json-query.git
+cd mcp-json-query
+pnpm install
+pnpm build
+pnpm dxt:pack
 ```
 
 ---

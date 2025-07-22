@@ -54,11 +54,11 @@ git pull origin main
 
 # Run quality checks
 echo "🔍 Running quality checks..."
-yarn run quality
+pnpm run quality
 
 # Build the project
 echo "🔨 Building project..."
-yarn run build
+pnpm run build
 
 # Get current version
 CURRENT_VERSION=$(node -p "require('./package.json').version")
@@ -66,7 +66,7 @@ echo "📋 Current version: $CURRENT_VERSION"
 
 # Bump version
 echo "📈 Bumping $RELEASE_TYPE version..."
-yarn version --$RELEASE_TYPE --no-git-tag-version
+pnpm version --$RELEASE_TYPE --no-git-tag-version
 
 # Get new version
 NEW_VERSION=$(node -p "require('./package.json').version")
@@ -74,7 +74,7 @@ echo "🎉 New version: $NEW_VERSION"
 
 # Create DXT package to verify everything works
 echo "📦 Creating DXT package..."
-yarn run dxt:pack
+pnpm run dxt:pack
 
 # Commit version change
 echo "💾 Committing version change..."
