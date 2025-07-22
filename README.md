@@ -11,10 +11,22 @@ Add the following to your Claude Desktop MCP server configuration:
 {
   "mcpServers": {
     "orca-mcp": {
-      "command": "node",
+      "command": "npx",
       "args": [
-        "@giraffemedia/orca-mcp@latest"
-      ]
+        "@giraffemedia/orca-mcp@1.0.3",
+        "--verbose=true",
+        "--max-results=1000",
+        "--workspace=C:\\Data",
+        "--file-uri=s3://giraffe-media-content/mcp-data/orca.json"
+      ],
+      "env": {
+        "NODE_ENV": "production",
+        "API_KEY": "TEST",
+        "DEBUG": "true",
+        "AWS_ACCESS_KEY_ID": "YOUR_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY": "YOUR_SECRET_ACCESS_KEY",
+        "AWS_REGION": "YOUR_AWS_REGION"
+      }
     }
   }
 }

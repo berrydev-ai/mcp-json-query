@@ -5,6 +5,7 @@ import generator from 'json-schema-generator';
 import { JSONPath } from 'jsonpath-plus';
 import { z } from 'zod';
 
+
 export function registerJsonQueryTool(server: McpServer) {
   server.registerTool(
     'json_query',

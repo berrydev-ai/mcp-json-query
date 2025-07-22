@@ -70,7 +70,7 @@ class OrcaMCPServer {
 
     try {
       const s3Sync = new S3SyncService({ verbose: this.options.verbose });
-      
+
       // Extract filename from S3 URI for local path
       const s3UriParts = this.options.fileUri.split('/');
       const filename = s3UriParts[s3UriParts.length - 1];
@@ -81,7 +81,7 @@ class OrcaMCPServer {
       }
 
       const wasDownloaded = await s3Sync.syncFile(this.options.fileUri, localPath);
-      
+
       if (wasDownloaded) {
         console.error(`✅ File synchronized from S3: ${filename}`);
       } else if (this.options.verbose) {
@@ -91,7 +91,7 @@ class OrcaMCPServer {
     } catch (error) {
       const err = error as { message: string };
       console.error(`❌ S3 sync failed: ${err.message}`);
-      
+
       // Don't exit - continue with server startup using existing local file if available
       if (this.options.verbose) {
         console.error('⚠️  Continuing with server startup - will use existing local files if available');
